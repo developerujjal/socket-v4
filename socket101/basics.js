@@ -1,12 +1,9 @@
 const express = require('express');
 const app = express();
 const { createServer } = require('http');
-const { join } = require('path');
 const { Server } = require('socket.io');
 
-app.get('/', (req, res) => {
-    res.sendFile(join(__dirname, '/public/basicsTheRightWay.html'));
-})
+app.use(express.static(__dirname + '/public'));
 
 const httpServer = createServer(app);
 
