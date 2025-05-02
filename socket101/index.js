@@ -5,7 +5,7 @@ const { join } = require('path');
 const { Server } = require('socket.io');
 
 app.get('/', (req, res) => {
-    res.sendFile(join(__dirname, '/public/basics.html'))
+    res.sendFile(join(__dirname, '/public/basicsTheRightWay.html'));
 })
 
 const httpServer = createServer(app);
