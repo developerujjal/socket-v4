@@ -2,6 +2,10 @@
 // const userName = prompt('What is your username?');
 // const password = prompt('What is your password');
 
+const userName = 'Barry';
+const password = 'x';
+
+
 const socket = io();
 
 socket.on('connect', () => {
