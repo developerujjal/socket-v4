@@ -1,54 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
 
-    <style>
-      .container {
-        margin-top: 30px;
-      }
-      input {
-        height: 35px;
-        width: 100%;
-      }
-      #messages {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-      #messages li {
-        padding: 5px 10px;
-      }
-      #message li:nth-child(odd) {
-        background: #aaa;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container text-center">
-      <form class="row" id="message-form">
-        <div class="col-6">
-          <input
-            id="user-message"
-            type="text"
-            placeholder="Enter your message"
-          />
-        </div>
-        <div class="col-2">
-          <input class="btn btn-primary" type="submit" value="Send!" />
-        </div>
-      </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-      <ul id="messages">
-        <!-- THIS WILL BE POPULATED BY JAVASCRIPT! -->
-      </ul>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-  </body>
+  <style>
+    .container {
+      margin-top: 30px;
+    }
+
+    input {
+      height: 35px;
+      width: 100%;
+    }
+
+    #messages {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    #messages li {
+      padding: 5px 10px;
+    }
+
+    #message li:nth-child(odd) {
+      background: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container text-center">
+    <form class="row" id="message-form">
+      <div class="col-6">
+        <input id="user-message" type="text" placeholder="Enter your message" />
+      </div>
+      <div class="col-2">
+        <input class="btn btn-primary" type="submit" value="Send!" />
+      </div>
+    </form>
+
+    <ul id="messages">
+      <!-- THIS WILL BE POPULATED BY JAVASCRIPT! -->
+    </ul>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io('http://localhost:5000');
+    const adminSocket = io('http://localhost:5000/admin');
+
+    socket.on('connect', () => {
+      console.log('Main socket connected!')
+    })
+
+    socket.on("welcomeToChatRoom", (data) => {
+      console.log('Welcome to the main chat room')
+    })
+
+    const form = document.getElementById('message-form');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const messageInput = document.querySelector('#user-message').value;
+      socket.emit('messageToServer', { message: messageInput });
+      console.log(messageInput);
+
+      messageInput.value = '';
+    });
+
+
+    adminSocket.on('connect', () => {
+      console.log('adminSocket is Connected')
+    })
+
+    socket.on('newMessageToClient', (data) => {
+      console.log(data)
+      const messageList = document.getElementById('messages');
+      const newElement = document.createElement('li');
+      newElement.innerText = data.message;
+      messageList.appendChild(newElement);
+    })
+
+  </script>
+</body>
+
 </html>
