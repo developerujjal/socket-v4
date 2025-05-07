@@ -15,8 +15,10 @@ socket.on('connect', () => {
 // nsList event for get the namespace from server
 socket.on('nsList', (nsData) => {
     console.log(nsData)
+    const lastNs = localStorage.getItem('lastNs');
 
     const namespacesDiv = document.querySelector('.namespaces');
+    namespacesDiv.innerHTML = '';
     nsData.forEach((ns) => {
         namespacesDiv.innerHTML += `
                 <div class="namespace" ns=${ns.endpoint}>
@@ -27,25 +29,14 @@ socket.on('nsList', (nsData) => {
 
 
     Array.from(document.getElementsByClassName('namespace')).forEach((element) => {
-        console.log(element)
+        // console.log(element)
         element.addEventListener('click', (e) => {
-            const nsEndPoint = element.getAttribute('ns');
-            console.log(nsEndPoint)
-
-            const clickedNs = nsData.find(ns => ns.endpoint === nsEndPoint);
-            console.log(clickedNs)
-
-            const roomListDiv = document.querySelector('.room-list');
-
-            roomListDiv.innerHTML = '';
-            
-            clickedNs.rooms.forEach((room) => {
-                roomListDiv.innerHTML += `
-                        <li><span class="glyphicon glyphicon-globe"></span>${room.roomTitle}</li>
-                `
-            } )
+           joinNs(element, nsData)
         })
     });
+
+    // if lastNs is set the grab that element instead of 0
+    joinNs(document.getElementsByClassName('namespace')[0], nsData);
 
 
 });
