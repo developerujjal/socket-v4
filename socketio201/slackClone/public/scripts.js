@@ -6,7 +6,10 @@ const userName = 'Barry';
 const password = 'x';
 
 
-const socket = io();
+const socket = io('http://localhost:3000');
+// const socket1 = io('http://localhost:3000/wiki');
+// const socket2 = io('http://localhost:3000/mozilla');
+// const socket3 = io('http://localhost:3000/linux');
 
 socket.on('connect', () => {
     console.log(socket.id)
@@ -25,6 +28,11 @@ socket.on('nsList', (nsData) => {
                     <img src=${ns.image}>
                 </div>
         `;
+
+        // join this namespace with io()
+
+        io(`http://localhost:3000/${ns.endpoint}`)
+
     });
 
 

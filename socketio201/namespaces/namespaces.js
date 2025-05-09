@@ -46,11 +46,11 @@ io.of("/").on('connection', (socket) => {
 io.of('/admin').on('connection', (socket) => {
     console.log(socket.id + 'has joined /admin')
     io.of('/admin').emit('something', {})
-})
+});
 
 
 
 
 httpServer.listen(5000, () => {
     console.log('Server is running on port 5000');
-})
+});
