@@ -29,9 +29,15 @@ socket.on('nsList', (nsData) => {
                 </div>
         `;
 
+        console.log(ns)
+
         // join this namespace with io()
 
-        io(`http://localhost:3000/${ns.endpoint}`)
+       const thisNs = io(`http://localhost:3000${ns.endpoint}`); // inside the namespac, it alreay have a /
+       thisNs.on('nsChange', (data)=> {
+        console.log('ns changed!');
+        console.log('ns Change data: ', data);
+       });
 
     });
 
